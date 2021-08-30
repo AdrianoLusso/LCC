@@ -21,8 +21,7 @@ public class Metodos {
     
     public static void biseccion()
     {
-        /*probando
-        */
+        
         double a,b,E,r;
         int itr = 1;
         
