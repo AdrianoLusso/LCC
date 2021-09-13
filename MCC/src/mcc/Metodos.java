@@ -18,9 +18,78 @@ public class Metodos {
     {
         //Probando
         
-        biseccion();
+        simpson();
     }
-    
+
+    //Aproximaciones de integrales definidas
+
+    public static void simpson()
+    {
+        double itr,ini,fin,h,sumatoriaImpar = 0,sumatoriaPar = 0;
+        int n;
+
+        System.out.println("Ingrese el punto inicial:");
+        ini = TecladoIn.readLineDouble();
+        System.out.println("Ingrese el punto final:");
+        fin = TecladoIn.readLineDouble();
+        System.out.println("Ingrese la cantidad de partes:");
+        n = TecladoIn.readLineInt();
+
+        if(n < 1)
+        {
+            System.out.println("Valor de n no valido.");
+        }
+        else
+        {
+            h = (fin - ini)/n;
+
+            for(itr = ini + h;itr < fin;itr = itr + h*2)
+            {
+                ;
+                sumatoriaImpar += f(itr);
+            }
+
+            for(itr = ini+h*2;itr < fin;itr = itr + h*2)
+            {
+                sumatoriaPar += f(itr);
+            }
+
+            System.out.println((h/3) * (f(ini) + f(fin) + sumatoriaImpar * 4 + sumatoriaPar * 2));
+        }
+    }
+
+    public static void trapecios()
+    {
+        double itr,ini,fin,h, sumatoria = 0;
+        int n;
+
+        System.out.println("Ingrese el punto inicial:");
+        ini = TecladoIn.readLineDouble();
+        System.out.println("Ingrese el punto final:");
+        fin = TecladoIn.readLineDouble();
+        System.out.println("Ingrese la cantidad de partes:");
+        n = TecladoIn.readLineInt();
+
+        if(n < 1)
+        {
+            System.out.println("Valor de n no valido.");
+        }
+        else
+        {
+            h = (fin - ini)/n;
+
+            for(itr = ini + h;itr < fin;itr = itr + h)
+            {
+                sumatoria += f(itr);
+            }
+
+            System.out.println((h/2) * f(ini) + f(fin) + sumatoria * 2);
+        }
+        
+    }
+
+    //Aproximaciones de raices
+
     public static void biseccion()
     {
         
@@ -87,15 +156,17 @@ public class Metodos {
         
         System.out.println("raiz aprox: " + x1);
     }
-            
+      
+    //Funcion y derivada
+
     public static double f(double x)
     {
-        return Math.PI * Math.pow(x, 2) * ((9-x)/3)-30;
+        return Math.tan(x);
     }
     
     public static double df(double x)
     {
-        return -160 * Math.pow(Math.E,(-2*x)) - 10 * Math.pow(Math.E,(-0.5*x));
+        return 3 * Math.pow(x,2) + 4 * x + 10;
     }
             
 }
