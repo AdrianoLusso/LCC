@@ -1,6 +1,7 @@
 {
     "java.project.sourcePaths": [
+        "PC/src/TP2",
         "MCC/src",
-        "PC/src/TP2"
+        "PC/src/TP3"
     ]
 }
