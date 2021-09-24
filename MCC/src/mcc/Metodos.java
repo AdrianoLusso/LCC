@@ -23,40 +23,79 @@ public class Metodos {
 
     //Aproximaciones de integrales definidas
 
-    public static void simpson()
-    {
-        double itr,ini,fin,h,sumatoriaImpar = 0,sumatoriaPar = 0;
+    public static void simpson (){
+
+        double a,b,h;
+        double[] f;
         int n;
+        boolean res;
 
-        System.out.println("Ingrese el punto inicial:");
-        ini = TecladoIn.readLineDouble();
-        System.out.println("Ingrese el punto final:");
-        fin = TecladoIn.readLineDouble();
-        System.out.println("Ingrese la cantidad de partes:");
-        n = TecladoIn.readLineInt();
+        System.out.println ("Ingrese el valor de a");
+        a=TecladoIn.readLineDouble();
 
-        if(n < 1)
-        {
-            System.out.println("Valor de n no valido.");
+        System.out.println ("Ingrese el valor de b");
+        b= TecladoIn.readLineDouble();
+
+        System.out.println ("Ingrese la cantidad de partes");
+        n=TecladoIn.readLineInt();
+        h=(b-a)/n;
+
+        System.out.println ("El valor de h es "+h);
+        f= new double [n+1];
+
+        System.out.println ("Desea trabajar con valores tabulados?t/f");
+        res=TecladoIn.readLineBoolean();
+        
+        if (res){
+            f= llenarArregloManualmente(f);
         }
-        else
-        {
-            h = (fin - ini)/n;
-
-            for(itr = ini + h;itr < fin;itr = itr + h*2)
-            {
-                ;
-                sumatoriaImpar += f(itr);
-            }
-
-            for(itr = ini+h*2;itr < fin;itr = itr + h*2)
-            {
-                sumatoriaPar += f(itr);
-            }
-
-            System.out.println((h/3) * (f(ini) + f(fin) + sumatoriaImpar * 4 + sumatoriaPar * 2));
+        else{
+            f=llenarArregloConLaFuncion(f, h, a);
         }
+        
+        double fx0= f[0];
+        double fxn=f[n];
+        double sumatoriaImpar=0,sumatoriaPar=0;
+        int i=1;
+        while (i<=n-1){
+            if (i%2!=0){              
+                sumatoriaImpar+=f[i];
+            }
+            
+            i++;
+        }
+        int j=2;
+        while (j<=n-2){
+            if (j%2==0){
+                sumatoriaPar+=f[j];
+            }
+           
+            j++;
+        }
+        double resultado= h/3*(fx0+fxn+4*sumatoriaImpar+2*sumatoriaPar);
+
+        System.out.println ("Resultado aproximado de la integral "+resultado);
+        
+        
     }
+
+    public static double [] llenarArregloManualmente(double [] array){
+        for (int i=0; i<array.length;i++){
+            System.out.println ("Ingrese el f(x) para el x"+i);
+            array[i]=TecladoIn.readLineDouble();
+            System.out.println (array[i]);
+        }
+        return array;
+    }
+    public static double [] llenarArregloConLaFuncion(double [] array, double h, double a){
+        for (int i=0; i<array.length;i++){
+            System.out.println(a);
+            array[i]=f(a);
+            a+=h;
+        }
+        return array;
+    }
+
 
     public static void trapecios()
     {
@@ -161,7 +200,7 @@ public class Metodos {
 
     public static double f(double x)
     {
-        return Math.tan(x);
+        return 1 / (2 * x) + x;
     }
     
     public static double df(double x)

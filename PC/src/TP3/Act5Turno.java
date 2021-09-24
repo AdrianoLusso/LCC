@@ -8,12 +8,13 @@ public class Act5Turno {
     }
 
 
-    public int getNum() {
+    public synchronized int getNum() {
         return this.num;
     }
 
-    public  void sigNum() {
+    public synchronized void sigNum() {
         //num = (num + 1) % 3;
+
         if(num == 3)
         {
             num = 1;
