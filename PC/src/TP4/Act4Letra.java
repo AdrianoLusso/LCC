@@ -1,45 +1,23 @@
-import java.util.concurrent.Semaphore;
-
 public class Act4Letra implements Runnable {
-    
-    private Semaphore aAdquirir,aLiberar;
-    private static int cantItr = 100;
-    private int cantChars;
+    private int turno;
     private char letra;
-
-    public Act4Letra(char letra,int cantChars,Semaphore aAdquirir,Semaphore aLiberar){
+    private int reps;
+    private static int cantItr= 20;
+    private static Act4Impresora impresora = new Act4Impresora();
+    
+    public Act4Letra(char letra,int reps,int turno)
+    {
+        this.turno = turno;
         this.letra = letra;
-        this.cantChars = cantChars;
-        this.aAdquirir = aAdquirir;
-        this.aLiberar = aLiberar;
+        this.reps = reps;
     }
 
     public void run()
     {
-        int itrRestantes = cantItr;
-
-        for(int i = 0;i < itrRestantes;i++)
+        for(int i=0;i<cantItr;i++)
         {
-            try {
-            aAdquirir.acquire();
-            Thread.sleep(100);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-    
-            for(int j = 0;j < cantChars;j++)
-            {
-                System.out.print(letra);
-            }
-
-            if(letra == 'C')
-            {
-                System.out.println("");
-            }
-            aLiberar.release();
+            impresora.imprimir(letra,reps,turno);
         }
-        
     }
 
 }
