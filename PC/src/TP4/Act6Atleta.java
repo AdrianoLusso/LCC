@@ -60,7 +60,6 @@ public class Act6Atleta implements Runnable {
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            
         }
 
         //deja el testigo

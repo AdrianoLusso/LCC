@@ -18,6 +18,7 @@ public class Act6Carrera {
         for(int i = 0;i<6;i++)
         {
             arr[i].start();
+            
         }
     }
 }

@@ -37,6 +37,7 @@ public class Act6Testigo {
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            
         }
     }
 
