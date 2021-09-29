@@ -15,13 +15,12 @@ public class Act6Atleta implements Runnable {
     @Override
     public void run() {
         
-        this.opcion1();
+        this.opcion2();
     }
 
     public void opcion1()
     {
         boolean gano;
-        int cant;
         
         do{
             //Espera su turno de carrera.
@@ -50,4 +49,21 @@ public class Act6Atleta implements Runnable {
         }while(!gano);
     }
 
+    public void opcion2()
+    {
+        //Agarra el testigo
+        testigo.agarrar();
+        System.out.println(Thread.currentThread().getName() + " tiene el testigo y ahora corre.");
+        //corre
+        try {
+            Thread.sleep((int) (Math.random() * (500-200)+200));
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        //deja el testigo
+
+        testigo.soltar();
+    }
 }

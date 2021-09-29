@@ -12,6 +12,7 @@ public class Act6Testigo {
 
     public boolean agarrar(int ladoCorredor)
     {
+        //agarrar para opcion 1
         boolean agarrado;
 
         if(lado == ladoCorredor && semtest.tryAcquire())
@@ -26,6 +27,22 @@ public class Act6Testigo {
        }
 
         return agarrado;
+    }
+
+    public void agarrar()
+    {
+        //agarrar para opcion 2
+        try {
+            semtest.acquire();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void soltar()
+    {
+        semtest.release();
     }
     
     public void reubicar()
