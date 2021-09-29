@@ -101,7 +101,56 @@ public class Act5Centro {
         return constancia;
     }
 
+
     private void verificarDispA()
+    {
+        try {
+            semMutexA.acquire();
+        } catch (InterruptedException e2) {
+            e2.printStackTrace();
+        }
+         if(cantADisp <= 1)
+         {
+             semMutexA.release();
+             try {
+                semEsperarA.acquire();
+                semMutexA.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+         }
+
+        cantADisp--;
+        semMutexA.release();
+    }
+
+    private void verificarDispB()
+    {        
+
+        //Exclusion mutua sobre cantBDisp
+        try {
+            semMutexB.acquire();
+        } catch (InterruptedException e2) {
+            e2.printStackTrace();
+        }
+
+       if(cantBDisp <= 1)
+        {
+            semMutexB.release();
+            //Todas las impresoras B llenas.Debe esperar.
+            try {
+                semEsperarB.acquire();
+                semMutexB.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        cantBDisp--;
+        semMutexB.release();
+    }
+
+    private void verificarDispAAA()
     {
 
         //Exclusion mutua sobre cantADisp
@@ -135,7 +184,7 @@ public class Act5Centro {
         semMutexA.release();
     }
 
-    private void verificarDispB()
+    private void verificarDispBbbb()
     {        
 
         //Exclusion mutua sobre cantBDisp
