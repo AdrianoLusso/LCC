@@ -2,14 +2,22 @@ public class Act6Carrera {
     
     public static void main(String[] args)
     {
-        Thread pepe = new Thread(new Act6Atleta(1),"Pepe");
-        Thread juan = new Thread(new Act6Atleta(1),"Juan");
-        Thread lucas = new Thread(new Act6Atleta(2),"Lucas");
-        Thread tom = new Thread(new Act6Atleta(2),"Tom");
+        Thread[] arr = new Thread[6];
+        //Thread nina = new Thread(new Act6Atleta(1),"Layla");
 
-        pepe.start();
-        juan.start();
-        lucas.start();
-        tom.start();
+        for(int i = 0;i<3;i++)
+        {
+            arr[i] = new Thread(new Act6Atleta(0),""+i);
+        }
+
+        for(int i = 3;i<6;i++)
+        {
+            arr[i] = new Thread(new Act6Atleta(1),""+i);
+        }
+
+        for(int i = 0;i<6;i++)
+        {
+            arr[i].start();
+        }
     }
 }
