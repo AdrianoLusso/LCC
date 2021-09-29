@@ -1,32 +1,31 @@
 public class Act5Usuario implements Runnable {
-    
-    //Consideraremos tipo - a las que no necesitan un tipo especifico
-    private char tipoImpNecesaria;
 
-    public static void generarImpresoras(int cantImpA,int cantImpB)
+    public static Act5Centro centro = new Act5Centro(3,2);
+    char tipo;
+
+    public Act5Usuario(char ti)
     {
-    }
-
-    public Act5Usuario(char tipo)
-    {
-
-        this.tipoImpNecesaria = tipo;
-        
+        tipo = ti;
     }
 
     public void run()
     {
-        //Emula el tiempo en el que el usuario genera su trabajo
+        boolean constancia;
+
+        //Generar trabajo
+        System.out.println(Thread.currentThread().getName() + " genera su trabajo.");
         try {
-            System.out.println(Thread.currentThread().getName() + ": generando trabajo...");
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        //Va a imprimir
-        centro.irAImprimir(tipoImpNecesaria);
-    }
+        //Solicitar impresion
 
+        constancia = centro.solicitarImpresion(tipo);
+
+        //Ir a imprimir con la respectiva solicitud
+        centro.imprimir(constancia);
+    }
 }
