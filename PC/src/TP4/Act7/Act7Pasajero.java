@@ -1,3 +1,4 @@
+package Act7;
 public class Act7Pasajero implements Runnable {
     
     private Act7Taxi taxi;

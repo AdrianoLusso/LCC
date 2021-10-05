@@ -1,3 +1,4 @@
+package Act1;
 public class Act1SynchronizedObjectCounter {
     
     private int c = 0;

@@ -1,3 +1,4 @@
+package Act7;
 import java.util.concurrent.Semaphore;
 
 public class Act7Taxi {
@@ -41,6 +42,7 @@ public class Act7Taxi {
 
     public void salirDelTaxi()
     {
+
         try {
             semLlegamos.acquire();
             System.out.println(Thread.currentThread().getName() + " salio del taxi.");

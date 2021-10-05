@@ -1,3 +1,4 @@
+package Act5;
 public class Act5Usuario implements Runnable {
 
     public static Act5Centro centro = new Act5Centro(3,2);

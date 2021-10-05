@@ -1,3 +1,4 @@
+package Act9;
 public class Act9Hamster implements Runnable {
     
     private static Act9Jaula jaula = new Act9Jaula();

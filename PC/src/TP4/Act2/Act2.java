@@ -1,3 +1,4 @@
+package Act2;
 public class Act2 {
     /*
     a- Proceso 1 es el proceso inicial dentro del grafo de secuencia de ejecucion entre

@@ -1,3 +1,4 @@
+package Act6;
 import java.util.concurrent.Semaphore;
 
 public class Act6Testigo {
