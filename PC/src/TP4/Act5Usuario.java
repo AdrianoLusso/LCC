@@ -22,7 +22,6 @@ public class Act5Usuario implements Runnable {
         }
 
         //Solicitar impresion
-
         constancia = centro.solicitarImpresion(tipo);
 
         //Ir a imprimir con la respectiva solicitud
