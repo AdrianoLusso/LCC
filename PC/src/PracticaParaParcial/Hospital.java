@@ -32,7 +32,7 @@ public class Hospital {
     {
         System.out.println("Se empieza la extraccion de " + Thread.currentThread().getName());
         try {
-            Thread.sleep(1000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
