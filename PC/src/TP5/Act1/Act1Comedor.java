@@ -1,3 +1,4 @@
+package Act1;
 import java.util.concurrent.Semaphore;
 
 public class Act1Comedor {

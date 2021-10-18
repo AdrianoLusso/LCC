@@ -1,3 +1,4 @@
+package Act1;
 public class Act1Animal implements Runnable {
     
     //true: perro, false: gato
