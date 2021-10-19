@@ -36,6 +36,10 @@ public class Comedor {
                 mutex.release();
                 //espera que el ultimo gato que se vaya le libere el permiso
                 rendezvous.acquire();
+
+                mutex.acquire();
+                cantPerrosEsperando--;
+                mutex.release();
                 System.out.println (Thread.currentThread().getName() +" puede agarrar un plato");
             }
             platosP.acquire();
@@ -65,6 +69,10 @@ public class Comedor {
                 mutex.release();
                 //espera que el ultimo perro que se vaya le libere el permiso
                 rendezvous.acquire();
+
+                mutex.acquire();
+                cantGatosEsperando--;
+                mutex.release();
                 System.out.println (Thread.currentThread().getName() +" puede agarrar un plato");
             }
             platosG.acquire();
@@ -94,15 +102,19 @@ public class Comedor {
             cantPerrosComiendo--;
             System.out.println (Thread.currentThread().getName()+ "efectivamente se fue.Ahora hay " +cantPerrosComiendo);
 
-            if (cantPerrosComiendo==0 && cantGatosEsperando>=1){
-                cantGatosEsperando--;
-                comiendo='G';
+            if (cantGatosEsperando>=1){
+               
                 mutex.release();
+                comiendo='G';
 
+                if(cantPerrosComiendo == 0)
+                {
                     rendezvous.release(cantidadPlatos);
-                
-              
+                    platosG.release(cantidadPlatos);
+                }
+                      
             }else{
+                platosP.release();
                 if (cantGatosEsperando==0 && cantPerrosEsperando>=1){
                     rendezvous.release();
                 }
@@ -120,14 +132,18 @@ public class Comedor {
             cantGatosComiendo--;
             System.out.println (Thread.currentThread().getName()+ "efectivamente se fue.Ahora hay " +cantGatosComiendo);
 
-            if (cantGatosComiendo==0 && cantPerrosEsperando>=1){
-                cantPerrosEsperando--;
-                comiendo='P';
+            if (cantPerrosEsperando>=1){
+                
                 mutex.release();
-               
-                    rendezvous.release(cantidadPlatos);
+                comiendo='P';
 
+                if(cantGatosComiendo == 0)
+                {
+                    rendezvous.release(cantidadPlatos);
+                    platosP.release(cantidadPlatos);
+                }
             }else{
+                platosG.release();
                 if (cantPerrosEsperando==0 && cantGatosEsperando>=1){
                     rendezvous.release();
                 }
