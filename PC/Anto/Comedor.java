@@ -75,9 +75,9 @@ public class Comedor {
     public void incrementarCantGatoComiendo(){
         try {
             mutex.acquire();
-            System.out.println("Gatos antes, " +cantPerrosComiendo);
+            System.out.println("Gatos antes, " +cantGatosComiendo);
             cantGatosComiendo++;
-            System.out.println(Thread.currentThread().getName() + " esta comiendo.Ahora hay " +cantPerrosComiendo);
+            System.out.println(Thread.currentThread().getName() + " esta comiendo.Ahora hay " +cantGatosComiendo);
             mutex.release();
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,10 +99,7 @@ public class Comedor {
                 comiendo='G';
                 mutex.release();
 
-                for (int i=0;i<cantidadPlatos;i++){
-                    //libero a todos los gatos que estaban esperando el permiso 
                     rendezvous.release(cantidadPlatos);
-                }
                 
               
             }else{
@@ -121,17 +118,14 @@ public class Comedor {
 
             System.out.println (Thread.currentThread().getName()+ "deja el plato y se va ");
             cantGatosComiendo--;
-            System.out.println (Thread.currentThread().getName()+ "efectivamente se fue.Ahora hay " +cantPerrosComiendo);
+            System.out.println (Thread.currentThread().getName()+ "efectivamente se fue.Ahora hay " +cantGatosComiendo);
 
             if (cantGatosComiendo==0 && cantPerrosEsperando>=1){
                 cantPerrosEsperando--;
                 comiendo='P';
                 mutex.release();
                
-                for (int i=0;i<cantidadPlatos;i++){
-                    //libero a todos los perros que estaban esperando el permiso 
-                    rendezvous.release();
-                }
+                    rendezvous.release(cantidadPlatos);
 
             }else{
                 if (cantPerrosEsperando==0 && cantGatosEsperando>=1){
