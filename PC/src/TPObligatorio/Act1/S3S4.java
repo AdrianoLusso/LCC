@@ -55,8 +55,5 @@ public class S3S4 implements Runnable{
         //Este metodo declara al proceso S2 como listo.
         this.b = b;
         semS2Listo.release();
-    }
-
-    
-    
+    }    
 }

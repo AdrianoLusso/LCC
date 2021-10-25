@@ -22,10 +22,7 @@ public class Fabrica {
                 semEmb.release();
                 mutex.release();
                 semCaja.acquire();
-            }else
-            {  
-                mutex.release();
-            }
+            }else{  mutex.release();}
        
             
         } catch (Exception e) {

@@ -10,7 +10,7 @@ public class Embotellador implements Runnable {
         while (i<50){
             try {
                
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (Exception e) {
                 e.printStackTrace();
             }

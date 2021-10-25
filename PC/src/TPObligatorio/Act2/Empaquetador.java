@@ -7,19 +7,18 @@ public class Empaquetador implements Runnable {
     }
     public void run (){
         int i=0;
-        while (i<50){
+        while (i<5){
             f.empaquetar();
             try {
                 System.out.println ("La caja se lleno, el empaquetador la toma, la sella y la almacena");
-                Thread.sleep(2000);
+                Thread.sleep(100);
             } catch (Exception e) {
                 
             }
             f.reponerCaja();
             i++;
         }
-        
-      
     }
+      
 }
 

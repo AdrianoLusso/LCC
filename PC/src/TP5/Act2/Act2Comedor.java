@@ -1,4 +1,4 @@
-package Act1;
+package Act2;
 import java.util.concurrent.Semaphore;
 
 public class Act2Comedor {
@@ -63,7 +63,6 @@ public class Act2Comedor {
         cantPerros--;
         System.out.println(Thread.currentThread().getName() + " se fue.Ahora son: " + cantPerros);
         mutexCants.release();
-        genPlatos.release(2); 
     }
 
     private void irseGato()
@@ -99,33 +98,9 @@ public class Act2Comedor {
         cantGatos--;
         System.out.println(Thread.currentThread().getName() + " se fue");
         mutexCants.release();
-        genPlatos.release();
     }
 
-    public void buscarPlato(boolean tipo)
-    {
-        if(tipo)
-        {
-            this.buscarPlatoPerro();
-        }
-        else
-        {
-            this.buscarPlatoGato();
-        }
-    }
-
-    private void buscarPlatoPerro()
-    {
-        try {
-            genPlatos.acquire(2);;
-            System.out.println(Thread.currentThread().getName() + " agarro un plato");
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    private void buscarPlatoGato()
+    public void buscarPlato()
     {
         try {
             genPlatos.acquire();
@@ -134,6 +109,11 @@ public class Act2Comedor {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    public void liberarPlato()
+    {
+        genPlatos.release();
     }
     
     public void entrar(boolean tipo)
