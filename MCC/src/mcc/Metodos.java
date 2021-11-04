@@ -3,7 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mcc;
+
+
+import java.net.PortUnreachableException;
+import java.security.DrbgParameters.Reseed;
 
 import Utiles.TecladoIn;
 
@@ -18,7 +21,208 @@ public class Metodos {
     {
         //Probando
         
-        simpson();
+        simpsonDoble();
+    }
+
+    //Aproximaciones de integrales dobles
+
+    public static void riemann()
+    {
+        double infX,infY,supX,supY,difX,difY,area,res = 0;
+        int m,n;
+
+        System.out.println("Ingrese limite inferior en x:"); 
+        infX = TecladoIn.readLineDouble();
+        System.out.println("Ingrese limite superior en x:");
+        supX = TecladoIn.readLineDouble();
+        System.out.println("Ingrese limite inferior en y:");
+        infY = TecladoIn.readLineDouble();
+        System.out.println("Ingrese limite superior en y:");
+        supY = TecladoIn.readLineDouble();
+
+        System.out.println("Ingrese m, es decir, cant de puntos en x: ");
+        m = TecladoIn.readLineInt();
+        System.out.println("Ingrese n,es decir, cant de puntos en y: ");
+        n = TecladoIn.readLineInt();
+        System.out.println("Ingrese el area de cada cuadrado:");
+        
+        difX =  (supX - infX) / m;
+        difY =  (supY - infY) / n;
+
+        area = difX * difY;
+        System.out.println("Area: " + area);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        for(double i = infX+difX;i<=supX; i = i+difX)
+        {
+            for(double j = infY+difY;j<=supY; j = j+difY)
+            {
+                System.out.println(i +"..."+j);
+                res += f(i,j);
+            }
+        }
+
+        System.out.println("Resultado: " + (res*area));
+    }
+
+    public static void simpsonDoble()
+    {
+        double infX,infY,supX,supY;
+        double h,k,res;
+        int m,n,aux,auxDos;
+        double[] I;
+
+        //Se piden los limites de la integral doble.
+        System.out.println("Ingrese limite inferior en x:"); 
+        infX = TecladoIn.readLineDouble();
+        System.out.println("Ingrese limite superior en x:");
+        supX = TecladoIn.readLineDouble();
+        System.out.println("Ingrese limite inferior en y:");
+        infY = TecladoIn.readLineDouble();
+        System.out.println("Ingrese limite superior en y:");
+        supY = TecladoIn.readLineDouble();
+
+        //Se pide la cantidad de subrectangulos en x e y.
+        System.out.println("Ingrese m, es decir, la cantidad\n de subrectangulos a traves del eje x");
+        m = TecladoIn.readLineInt();
+        System.out.println("Ingrese n, es decir, la cantidad\n de subrectangulos a traves del eje y");
+        n = TecladoIn.readLineInt();
+        I = new double[n+1];
+        
+        //Calculo de k y h.
+        k = (supY - infY) / n;
+        h = (supX - infX) / m;
+
+        //Calculo de Simpson para cada fila de la matriz.
+        aux = 0;
+        for(double y = infY;y <= supY;y = y + k)
+        {
+            I[aux] = 0;
+            auxDos = 0;
+            for(double x = infX; x <= supX; x = x + h)
+            {
+                if(x == infX || x == supX)
+                {
+                    I[aux] += f(x,y); 
+                }
+                else
+                {
+                    if(auxDos % 2 == 0)
+                    {
+
+                        I[aux] += 2 * f(x,y);
+                    }
+                    else
+                    {
+                        I[aux] += 4 * f(x,y);
+                    }
+                }
+                auxDos++;
+            }
+
+            I[aux] = I[aux] * (h/3);
+            System.out.println(I[aux]);
+            aux++;
+        }
+
+        //Calculo de trapecios con los resultados de las aproximaciones de cada fila.
+        res = 0;
+        for(int i = 0;i < I.length;i++)
+        {
+            if(i == 0 || i == (I.length-1))
+            {
+                res += I[i];
+            }
+            else
+            {
+                if(i % 2 == 0)
+                {   
+                    res += 2 * I[i];
+                }
+                else
+                {
+                    res += 4 * I[i];
+                }
+            }
+        }
+        res = res * (k/3);
+
+        System.out.println("Resultado: " + res);
+    }
+
+    public static void trapeciosDoble()
+    {
+        double infX,infY,supX,supY;
+        double h,k,res;
+        int m,n,aux;
+        double[] I;
+
+        //Se piden los limites de la integral doble.
+        System.out.println("Ingrese limite inferior en x:"); 
+        infX = TecladoIn.readLineDouble();
+        System.out.println("Ingrese limite superior en x:");
+        supX = TecladoIn.readLineDouble();
+        System.out.println("Ingrese limite inferior en y:");
+        infY = TecladoIn.readLineDouble();
+        System.out.println("Ingrese limite superior en y:");
+        supY = TecladoIn.readLineDouble();
+
+        //Se pide la cantidad de subrectangulos en x e y.
+        System.out.println("Ingrese m, es decir, la cantidad\n de subrectangulos a traves del eje x");
+        m = TecladoIn.readLineInt();
+        System.out.println("Ingrese n, es decir, la cantidad\n de subrectangulos a traves del eje y");
+        n = TecladoIn.readLineInt();
+        I = new double[n+1];
+
+        //Calculo de k y h.
+        k = (supY - infY) / n;
+        h = (supX - infX) / m;
+        System.out.println("h :" +h);
+        System.out.println("k :" +k);
+
+        //Calculo de trapecios para cada fila de la matriz.
+        aux = 0;
+        for(double y = infY;y <= supY;y = y + k)
+        {
+            I[aux] = 0;
+            for(double x = infX; x <= supX; x = x + h)
+            {
+                if(x == infX || x == supX)
+                {
+                    I[aux] += f(x,y); 
+                }
+                else
+                {
+                    I[aux] += 2 * f(x,y);
+                }
+            }
+
+            I[aux] = I[aux] * (h/2);
+            System.out.println(I[aux]);
+            aux++;
+        }
+
+        //Calculo de trapecios con los resultados de las aproximaciones de cada fila.
+        res = 0;
+        for(int i = 0;i < I.length;i++)
+        {
+            if(i == 0 || i == (I.length-1))
+            {
+                res += I[i];
+            }
+            else
+            {
+                res += 2 * I[i];
+            }
+        }
+        res = res * (k/2);
+
+        System.out.println("Resultado: " + res);
     }
 
     //Aproximaciones de integrales definidas
@@ -196,14 +400,24 @@ public class Metodos {
         System.out.println("raiz aprox: " + x1);
     }
       
-    //Funcion y derivada
+    //Funcion y derivada,simple y doble.
 
     public static double f(double x)
     {
-        return 1 / (2 * x) + x;
+        return Math.pow(x,2);
     }
     
     public static double df(double x)
+    {
+        return 3 * Math.pow(x,2) + 4 * x + 10;
+    }
+
+    public static double f(double x,double y)
+    {
+        return Math.exp(y-x);
+    }
+    
+    public static double df(double x,double y)
     {
         return 3 * Math.pow(x,2) + 4 * x + 10;
     }

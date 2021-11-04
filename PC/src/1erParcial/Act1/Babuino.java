@@ -26,7 +26,7 @@ public class Babuino implements Runnable {
     private void cruza()
     {
         /*
-        Este metodo emula em tiempo en el que el babuino cruza por la cuerda.
+        Este metodo emula en tiempo en el que el babuino cruza por la cuerda.
         */
         System.out.println(Thread.currentThread().getName() + " esta cruzando.");
         try {

@@ -1,6 +1,6 @@
 package Act2;
 
-public class Act2Main {
+public class Act2dot1Main {
     
     public static void main(String[] args)
     {
