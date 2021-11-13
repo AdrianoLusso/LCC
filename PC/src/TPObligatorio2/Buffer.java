@@ -11,17 +11,17 @@ public class Buffer {
     hayParte2 = mutex2.newCondition(),
     hayParte3 = mutex3.newCondition();
 
+    Condition pieza1Ensamblada = mutex1.newCondition(),
+    pieza2Ensamblada = mutex2.newCondition(),
+    pieza3Ensamblada = mutex3.newCondition();
     
     //Cantidad de partes que quedan por producir.
     private int cantPartes1Res,cantPartes2Res,cantPartes3Res,cantMueblesRes;
     private ReentrantLock mutex1Res  = new ReentrantLock(),mutex2Res  = new ReentrantLock(),
     mutex3Res = new ReentrantLock(),mutexM = new ReentrantLock();
 
-    Condition pieza1Ensamblada = mutex1Res.newCondition(),
-    pieza2Ensamblada = mutex2Res.newCondition(),
-    pieza3Ensamblada = mutex3Res.newCondition();
 
-    
+
     public Buffer(int cantMuebles)
     {
         cantMueblesRes = cantMuebles;
@@ -38,14 +38,17 @@ public class Buffer {
 
     public void finalizarEnsamble()
     {
-        mutexM.lock();
+        mutex1.lock();
+        pieza1Ensamblada.signal();
+        mutex1.unlock();
 
-        cantMueblesRes--;
-        pieza1Ensamblada.signalAll();;
-        pieza2Ensamblada.signalAll();;
-        pieza3Ensamblada.signalAll();;
+        mutex2.lock();
+        pieza2Ensamblada.signal();
+        mutex2.unlock();
 
-        mutexM.unlock();
+        mutex3.lock();
+        pieza3Ensamblada.signal();
+        mutex3.unlock();
     }
 
     public void tomarParte3()
@@ -74,7 +77,7 @@ public class Buffer {
             }
         }while(!continuar);
 
-        mutex1.unlock();
+        mutex3.unlock();
     }
 
     public void tomarParte2()
@@ -103,7 +106,7 @@ public class Buffer {
             }
         }while(!continuar);
 
-        mutex1.unlock();
+        mutex2.unlock();
     }
 
     public void tomarParte1()
@@ -111,7 +114,6 @@ public class Buffer {
         boolean continuar = false;
 
         mutex1.lock();
-        System.out.println("a");
         do
         {
             if(cantPartes1 > 0)
@@ -124,7 +126,6 @@ public class Buffer {
             {
                 //No habia parte 1, debe esperar.
                 try {
-                    System.out.println("b");
                     hayParte1.await();
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
@@ -163,9 +164,14 @@ public class Buffer {
 
         if(cantPartes1Res > 0)
         {
+            System.out.println(Thread.currentThread().getName() + " debe construir su parte.");
             //Quedan partes 1 por construir.
             res = true;
             cantPartes1Res--;
+        }
+        else
+        {
+            System.out.println(Thread.currentThread().getName() + " termino por hoy.");
         }
 
         mutex1Res.unlock();
@@ -175,10 +181,11 @@ public class Buffer {
 
     public void entregarParte1()
     {
-        mutex1Res.lock();
+        mutex1.lock();
 
-        //Se agrega la parte 1 al buffer, y se les avisa a los ensambladores que la esperabans.
-        cantPartes1Res++;
+        //Se agrega la parte 1 al buffer, y se les avisa a los ensambladores que la esperaban.
+        System.out.println(Thread.currentThread().getName() + " deja su pieza en buffer.");
+        cantPartes1++;
         hayParte1.signalAll();
 
         //Se espera a que se ensamble su pieza entregada.
@@ -205,6 +212,12 @@ public class Buffer {
             //Quedan partes 2 por construir.
             res = true;
             cantPartes2Res--;
+            System.out.println(Thread.currentThread().getName() + " debe construir su parte.");
+        }
+        else
+        {
+            System.out.println(Thread.currentThread().getName() + "termino por hoy. ");
+
         }
 
         mutex2Res.unlock();
@@ -214,10 +227,11 @@ public class Buffer {
 
     public void entregarParte2()
     {
-        mutex2Res.lock();
+        mutex2.lock();
 
-        //Se agrega la parte 2 al buffer, y se les avisa a los ensambladores que la esperabans.
-        cantPartes2Res++;
+        //Se agrega la parte 2 al buffer, y se les avisa a los ensambladores que la esperaban.
+        System.out.println(Thread.currentThread().getName() + " deja su pieza en buffer.");
+        cantPartes2++;
         hayParte2.signalAll();
 
         //Se espera a que se ensamble su pieza entregada.
@@ -244,6 +258,13 @@ public class Buffer {
             //Quedan partes 3 por construir.
             res = true;
             cantPartes3Res--;
+            System.out.println(Thread.currentThread().getName() + " debe construir su parte.");
+
+        }
+        else
+        {
+            System.out.println(Thread.currentThread().getName() + " termino construir su parte.");
+
         }
 
         mutex3Res.unlock();
@@ -253,10 +274,11 @@ public class Buffer {
 
     public void entregarParte3()
     {
-        mutex3Res.lock();
+        mutex3.lock();
 
-        //Se agrega la parte 3 al buffer, y se les avisa a los ensambladores que la esperabans.
-        cantPartes3Res++;
+        //Se agrega la parte 3 al buffer, y se les avisa a los ensambladores que la esperaban.
+        System.out.println(Thread.currentThread().getName() + " deja su pieza en buffer.");
+        cantPartes3++;
         hayParte3.signalAll();
 
         //Se espera a que se ensamble su pieza entregada.
@@ -267,6 +289,6 @@ public class Buffer {
             e.printStackTrace();
         }
 
-        mutex2.unlock();
+        mutex3.unlock();
     }
 }
