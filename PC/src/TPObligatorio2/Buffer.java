@@ -17,11 +17,11 @@ public class Buffer {
     private ReentrantLock mutex1Res  = new ReentrantLock(),mutex2Res  = new ReentrantLock(),
     mutex3Res = new ReentrantLock(),mutexM = new ReentrantLock();
 
-    
     Condition pieza1Ensamblada = mutex1Res.newCondition(),
     pieza2Ensamblada = mutex2Res.newCondition(),
     pieza3Ensamblada = mutex3Res.newCondition();
 
+    
     public Buffer(int cantMuebles)
     {
         cantMueblesRes = cantMuebles;

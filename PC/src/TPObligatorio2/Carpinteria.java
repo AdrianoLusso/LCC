@@ -27,14 +27,12 @@ public class Carpinteria {
         //Se crean ensambladores.
         for(int i = 0;i < N;i++)
         {
-            System.out.println(i);
             carp[i] = new Thread(new Carpintero(0, buffer), "ensamblador " +(i+1));
         }
 
         //Se crean carpinteros 1.
         for(int i = N;i < N+N1;i++)
         {
-            System.out.println(i);
 
             carp[i] = new Thread(new Carpintero(1, buffer), "carpintero UNO. " +(i+1));
         }
@@ -42,14 +40,12 @@ public class Carpinteria {
         //Se crean carpinteros 2.
         for(int i = N+N1;i < N+N1+N2;i++)
         {
-            System.out.println(i);
             carp[i] = new Thread(new Carpintero(2, buffer), "carpintero DOS. " +(i+1));
         }
 
         //Se crean carpinteros 1.
         for(int i = N+N1+N2;i < N+N1+N2+N3;i++)
         {
-            System.out.println(i);
             carp[i] = new Thread(new Carpintero(3, buffer), "carpintero TRES. " +(i+1));
         }
 
