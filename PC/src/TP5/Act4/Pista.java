@@ -9,7 +9,7 @@ public class Pista {
 
     //Asociados al control de prioridades para el despegue y aterrizaje.
     private Semaphore blockD = new Semaphore(0), blockA = new Semaphore(0);
-    private int avionPorDes = 0,atrRestantes = 10, avionPorAtr = 0;
+    private int avionPorDes = 0,atrRestantes = 3, avionPorAtr = 0;
 
     public Pista()
     {
@@ -96,10 +96,10 @@ public class Pista {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-
         avionPorDes++;
-        System.out.println(Thread.currentThread().getName() + " esta en condicion de despegar.");
+        mutexVars.release();
 
+        System.out.println(Thread.currentThread().getName() + " esta en condicion de despegar.");
 
         //Se verifica que no hayan aviones por aterrizar,y que tengan prioridad de hacerlo.
         if(atrRestantes > 0 && avionPorAtr > 0)
@@ -143,12 +143,11 @@ public class Pista {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-
         avionPorDes--;
         System.out.println(Thread.currentThread().getName() + " salio de la cola de espera de despegue.");
-
-
         mutexVars.release();
+
+        System.out.println(Thread.currentThread().getName()+ " dejo el control.");
     }
 
     public void finDespegue()
