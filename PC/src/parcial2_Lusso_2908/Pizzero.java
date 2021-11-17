@@ -4,16 +4,11 @@ public class Pizzero implements Runnable {
     
     //true: napolitana, false:vegana.
     private boolean tipo;
-    private Mostrador most = new Mostrador();
+    private Mostrador most;
 
-    public static void main(String[] args)
+    public Pizzero(Mostrador m)
     {
-
-    }
-
-    public Pizzero()
-    {
-
+        most = m;
     }
 
     public void run()
@@ -51,7 +46,7 @@ public class Pizzero implements Runnable {
 
 
         //Deja la pizza en el mostrador
-        most.dejarPedido();
+        most.dejarPedido(tipo);
         }
 
     }
