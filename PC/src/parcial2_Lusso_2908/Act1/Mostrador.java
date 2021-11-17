@@ -1,4 +1,4 @@
-package parcial2_Lusso_2908;
+package parcial2_Lusso_2908.Act1;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -6,8 +6,15 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Mostrador {
     
     //Cantidad de pedidos de hoy,y el arreglo de estos.
+    ReentrantLock mutexPedsPorEntr = new ReentrantLock();
+    ReentrantLock mutexCantPedidosHoy = new ReentrantLock();
+
+    private int pedsPorEntr;
     private int cantPedidosHoy;
     Pedido[] pedido;
+
+    ReentrantLock fin = new ReentrantLock();
+    Condition terminoPedidos = fin.newCondition();
 
     //Controla el proceso de dejar y tomar ordenes de pedido.
     private ReentrantLock entregaPedido = new ReentrantLock();
@@ -26,7 +33,72 @@ public class Mostrador {
     {
         espacio = MAX;
         cantPedidosHoy = cant;
+        pedsPorEntr = cant;
         pedido = new Pedido[cant];
+    }
+
+    public boolean quedaPedidoPorEntregar()
+    {
+        boolean a = false;
+
+        mutexPedsPorEntr.lock();
+
+        if(pedsPorEntr > 0)
+        {
+            a = true;
+            pedsPorEntr--;
+        }
+
+        mutexPedsPorEntr.unlock();
+
+        return a;
+    }
+
+    public void finPedidos()
+    {
+        boolean c = false;
+
+        fin.lock();
+
+        do
+        {
+            if(cantPedidosHoy > 0)
+            {
+                try {
+                    terminoPedidos.await();
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                c = true;
+                entregaPedido.lock();
+                hayOrdenNap.signalAll();
+                hayOrdenVeg.signalAll();
+                entregaPedido.unlock();
+            }
+        }while(!c);
+        fin.unlock();
+    }
+
+    public int getCantPedidosHoy()
+    {
+        int a;
+
+        mutexCantPedidosHoy.lock();
+        a = cantPedidosHoy;
+        mutexCantPedidosHoy.unlock();
+
+        return a;
+    }
+
+    public void unPedidoMenos()
+    {
+        mutexCantPedidosHoy.lock();
+        cantPedidosHoy--;
+        mutexCantPedidosHoy.unlock();
     }
 
     public Pedido tomarPedido()
@@ -122,6 +194,7 @@ public class Mostrador {
 
         //Se deja el pedido en el mostrador.
         pedidosEnMostr++;
+        unPedidoMenos();
 
         //Se avisa,si hay repartidor durmiendo, para que vea el pedido.
         hayPedido.signal();
@@ -166,9 +239,10 @@ public class Mostrador {
         mostrador.unlock();
     }
 
-    public void esperarPedido(boolean tipo)
+    public boolean esperarPedido(boolean tipo)
     {
         boolean continuar = false;
+        boolean terminoDeTrabajar = false;
         int i = 0;
 
         entregaPedido.lock();
@@ -176,50 +250,61 @@ public class Mostrador {
         //Se verifica si hay pedidos del tipo que le corresponde
         do
         {
-            if(tipo)
+            //Si ya no queda pedidos este dia, el pizero puedo irse a su casa!
+            if(getCantPedidosHoy() == 0)
             {
-                //tipo nap
-                if(cantPedidosNap == 0)
-                {
-                    //no hay pedidos,espera
-                    try {
-                        hayOrdenNap.await();
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-                else
-                {
-                    //si hay pedidos,lo toma
-                    cantPedidosNap--;
-                    continuar = true;
-                }
+                continuar = true;
+                terminoDeTrabajar = true;
             }
             else
             {
-                //tipo veg
-                if(cantPedidosVeg == 0)
+                //Aun queda posible trabajo por hacer.
+                if(tipo)
                 {
-                    // no hay pedidos,espera
-                    try {
-                        hayOrdenVeg.await();
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    //tipo nap
+                    if(cantPedidosNap == 0)
+                    {
+                    //no hay pedidos,espera
+                        try {
+                            hayOrdenNap.await();
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                    else
+                    {
+                        //si hay pedidos,lo toma
+                        cantPedidosNap--;
+                        continuar = true;
                     }
                 }
                 else
                 {
-                    //si hay pedidos,lo toma
-                    cantPedidosVeg--;
-                    continuar = true;
-
-                }
+                    //tipo veg
+                    if(cantPedidosVeg == 0)
+                    {
+                        // no hay pedidos,espera
+                        try {
+                            hayOrdenVeg.await();
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                    else
+                    {
+                        //si hay pedidos,lo toma
+                        cantPedidosVeg--;
+                        continuar = true;
+                    }
+                } 
             }
         }while(!continuar);
 
         entregaPedido.unlock();
+
+        return terminoDeTrabajar;
     }
 
 

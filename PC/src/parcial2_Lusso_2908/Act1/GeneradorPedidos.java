@@ -1,4 +1,4 @@
-package parcial2_Lusso_2908;
+package parcial2_Lusso_2908.Act1;
 
 import java.util.Random;
 

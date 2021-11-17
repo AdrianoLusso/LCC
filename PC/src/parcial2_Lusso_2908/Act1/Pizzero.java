@@ -1,4 +1,4 @@
-package parcial2_Lusso_2908;
+package parcial2_Lusso_2908.Act1;
 
 public class Pizzero implements Runnable {
     
@@ -13,7 +13,11 @@ public class Pizzero implements Runnable {
 
     public void run()
     {
-        //bucle de no se cuanto
+        boolean termino;
+
+        termino = most.esperarPedido(tipo);
+        
+        while(!termino)
         {
         //Le notifican de un pedido de SU TIPO.Para cada tipo hay una Condition
         most.esperarPedido(tipo);
@@ -47,6 +51,8 @@ public class Pizzero implements Runnable {
 
         //Deja la pizza en el mostrador
         most.dejarPedido(tipo);
+
+        termino = most.esperarPedido(tipo);
         }
 
     }
