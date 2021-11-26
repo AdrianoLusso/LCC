@@ -1,3 +1,5 @@
+package TP2;
+
 public class Act6MainThread {
     
     public static void main(String[] args)

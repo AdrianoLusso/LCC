@@ -1,3 +1,6 @@
+package TP2;
+
+
 public class Act6Cajero
 {
     private String nombre;

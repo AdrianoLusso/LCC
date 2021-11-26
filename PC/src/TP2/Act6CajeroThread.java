@@ -1,3 +1,7 @@
+package TP2;
+
+
+
 public class Act6CajeroThread extends Thread
 {
     private String nombre;

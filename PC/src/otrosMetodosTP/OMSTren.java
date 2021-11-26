@@ -1,19 +1,25 @@
-package Act3;
+package otrosMetodosTP;
 
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Exchanger;
 import java.util.concurrent.Semaphore;
 
-public class Act3Tren {
+public class OMSTren {
     
     private int cantEspacios;
 
-    //Semaforo generico que regula el espacio disponible en el tren.
+    //Semaforo binario que asegura exclusion mutua sobre la cantidad de gente en el tren.
+    private Semaphore mutexCantGenteEnTren = new Semaphore(1);
+    private int cantGenteEnTren;
+
+    //Barreras ciclicas que que regulan el trafico en el tren.
+    private CyclicBarrier trenLleno;
+    private CyclicBarrier trenAVaciar;
     private Semaphore ocuparEspacios;
-    private Semaphore liberarEspacios;
 
     //Semaforos que aseguren exclusion mutua sobre el control y venta.
-    private CyclicBarrier mutexVenta = new CyclicBarrier(1,new Act3VendedorTickets(this)); 
+    private Semaphore mutexVenta = new Semaphore(1); 
     private Semaphore mutexControl = new Semaphore(1); 
 
     //Semaforos binarios para rendezvous entre pasajero-vendedor de tickets.
@@ -24,49 +30,66 @@ public class Act3Tren {
     private Semaphore pasoControl = new Semaphore(0);
     private Semaphore pasoPasajeroTren = new Semaphore(0);
 
-    public Act3Tren(int cant)
+    public OMSTren(int cant)
     {
         cantEspacios = cant;
+        trenLleno = new CyclicBarrier(cant);
+        trenAVaciar = new CyclicBarrier(cant);
         ocuparEspacios = new Semaphore(cant);
-        liberarEspacios = new Semaphore(0);
     }
-
-    public void subirBarrera()
-    {
-        mutexVenta.reset();
-    }
-
     public void bajarTren()
     {
         try {
-            liberarEspacios.acquire();
-        } catch (InterruptedException e) {
+            trenAVaciar.await();
+            mutexCantGenteEnTren.acquire();
+        } catch (InterruptedException | BrokenBarrierException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         System.out.println(Thread.currentThread().getName() + " bajo.");
 
-        if(liberarEspacios.availablePermits() == 0)
+        cantGenteEnTren--;
+        if(cantGenteEnTren == 0)
         {
+            mutexCantGenteEnTren.release();
             System.out.println(Thread.currentThread().getName() + " fue el ultimo pasajero en bajar.");
+
             ocuparEspacios.release(cantEspacios);
+        }
+        else
+        {
+            mutexCantGenteEnTren.release();
         }
     }
 
     public void viaje()
     {
-        if(ocuparEspacios.availablePermits() == 0)
+        try {
+            trenLleno.await();
+            mutexCantGenteEnTren.acquire();
+
+        } catch (InterruptedException | BrokenBarrierException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        cantGenteEnTren++;
+        if(cantGenteEnTren == 1)
         {
-            System.out.println("El tren se lleno!Arranca el viaje.");
+            mutexCantGenteEnTren.release();
+    
+            System.out.println("EL TREN SE LLENO!Arranca el viaje.");
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            System.out.println("El tren llego a la estacion.");
-            liberarEspacios.release(cantEspacios);
+            System.out.println("EL TREN LLEGO A LA ESTACION");
+        }
+        else
+        {
+            mutexCantGenteEnTren.release();
         }
     }
 
@@ -115,21 +138,19 @@ public class Act3Tren {
     {
         try {
             try {
-                System.out.println("a");
-                mutexVenta.await();
-                System.out.println("b");
-            } catch (BrokenBarrierException e) {
+                mutexVenta.acquire();
+            } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             System.out.println(Thread.currentThread().getName() + " va a comprar el ticket.");
-
             pasoVendedor.release();
 
             System.out.println(Thread.currentThread().getName() + " espera a que le den el ticket.");
             pasoPasajeroTicket.acquire();
             System.out.println(Thread.currentThread().getName() + " reciben el ticket, y avanza al control.");
 
+            mutexVenta.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

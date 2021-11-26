@@ -21,10 +21,44 @@ public class Metodos {
     {
         //Probando
         
-        simpsonDoble();
+        eulerModificado();
     }
 
     //Aproximaciones de integrales dobles
+
+    public static void eulerModificado()
+    {
+        double x0,y0,a,b,yiA,yi,m,h,n,j,i;
+
+        System.out.println("Ingrese el x0:");
+        x0 = TecladoIn.readLineDouble();
+        System.out.println("Ingrese el y0:");
+        y0 = TecladoIn.readLineDouble();
+        System.out.println("Ingrese el limite inferior del intervalo, a:");
+        a = TecladoIn.readLineDouble();
+        System.out.println("Ingrese el limite superior del intervalo, b:");
+        b = TecladoIn.readLineDouble();
+        System.out.println("Ingrese el h:");
+        h = TecladoIn.readLineDouble();
+
+        n = x0;
+        m = y0;
+        j = 1;
+        i = a;
+
+        while(n<b)
+        {
+            yiA = m+h*df(n, m);
+            System.out.println("Valor predecido de y" +j+ ": "+yiA);
+
+            yi = m+(h/2)*(df(n,m) + df(n+h,yiA));
+            System.out.println("Valor corregido de y" +j+ ": "+yi+ "\n");
+
+            n=n+h;
+            m=yi;
+            j++;
+        }
+    }
 
     public static void riemann()
     {
@@ -409,7 +443,7 @@ public class Metodos {
     
     public static double df(double x)
     {
-        return 3 * Math.pow(x,2) + 4 * x + 10;
+        return x;
     }
 
     public static double f(double x,double y)
@@ -419,7 +453,7 @@ public class Metodos {
     
     public static double df(double x,double y)
     {
-        return 3 * Math.pow(x,2) + 4 * x + 10;
+        return 2*x*y;
     }
             
 }

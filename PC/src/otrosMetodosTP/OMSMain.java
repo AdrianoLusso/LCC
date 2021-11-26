@@ -1,8 +1,8 @@
-package Act3;
+package otrosMetodosTP;
 
 import Utiles.TecladoIn;
 
-public class Act3Main {
+public class OMSMain {
     
     public static void main(String[] args)
     {
@@ -10,7 +10,7 @@ public class Act3Main {
         int cantPasajeros,cantEspacios;
         Thread[] arr;
         Thread control,vendedor;
-        Act3Tren tren;
+        OMSTren tren;
 
 
         //Se pide info al usuario.
@@ -21,15 +21,15 @@ public class Act3Main {
         cantEspacios = TecladoIn.readLineInt();
 
         //Se crea el tren, vendedor de tickets y control del tren.
-        tren = new Act3Tren(cantEspacios);
-        control = new Thread(new Act3ControlTren(tren,cantPasajeros),"controlador");
-        vendedor = new Thread(new Act3VendedorTickets(tren),"vendedor");
+        tren = new OMSTren(cantEspacios);
+        control = new Thread(new OMSControlTren(tren,cantPasajeros),"controlador");
+        vendedor = new Thread(new OMSVendedorTickets(tren,cantPasajeros),"vendedor");
 
         //Se crean los pasajeros.
         arr = new Thread[cantPasajeros];
         for(int i = 0;i<cantPasajeros;i++)
         {
-            arr[i] = new Thread(new Act3Pasajero(tren),"pasajero " + (i+1));
+            arr[i] = new Thread(new OMSPasajero(tren),"pasajero " + (i+1));
         }
 
 
