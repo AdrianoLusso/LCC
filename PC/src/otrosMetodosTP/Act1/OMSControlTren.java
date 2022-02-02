@@ -1,4 +1,4 @@
-package otrosMetodosTP;
+package otrosMetodosTP.Act1;
 
 public class OMSControlTren implements Runnable {
 

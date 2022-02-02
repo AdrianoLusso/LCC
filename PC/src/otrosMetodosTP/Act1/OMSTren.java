@@ -1,4 +1,4 @@
-package otrosMetodosTP;
+package otrosMetodosTP.Act1;
 
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;

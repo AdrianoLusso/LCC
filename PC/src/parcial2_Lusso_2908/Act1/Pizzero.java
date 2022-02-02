@@ -20,6 +20,7 @@ public class Pizzero implements Runnable {
         while(!termino)
         {
         //Le notifican de un pedido de SU TIPO.Para cada tipo hay una Condition
+        //ESTO TENIA QUE BORRARLO!
         most.esperarPedido(tipo);
 
         //Empieza a armar la piza.PERO DEBE CORROBORAR QUE HAYA ESPACIO EN EL MOSTRADOR.
