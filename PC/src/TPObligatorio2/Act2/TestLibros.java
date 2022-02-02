@@ -2,7 +2,7 @@ package Act2;
 
 import Utiles.TecladoIn;
 
-public class Test2dot2 {
+public class TestLibros {
     public static void main(String[] args){
         System.out.println("ingrese la cantidad de escritores");
         int escritores= TecladoIn.readInt();

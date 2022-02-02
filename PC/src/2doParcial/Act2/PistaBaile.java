@@ -1,4 +1,4 @@
-package parcial2_Lusso_2908.Act2;
+package parcial2.Act2;
 
 import java.util.Random;
 import java.util.concurrent.Semaphore;

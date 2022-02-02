@@ -1,4 +1,4 @@
-package parcial2_Lusso_2908.Act1;
+package parcial2.Act1;
 
 public class Repartidor implements Runnable {
     

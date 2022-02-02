@@ -26,7 +26,7 @@ public class OMSTren {
     private Semaphore pasoVendedor = new Semaphore(0);
     private Semaphore pasoPasajeroTicket = new Semaphore(0);
 
-    //Semaforos binarios para rendezvous entre pasajero-vendedor de tickets.
+    //Semaforos binarios para rendezvous entre pasajero-control de tickets.
     private Semaphore pasoControl = new Semaphore(0);
     private Semaphore pasoPasajeroTren = new Semaphore(0);
 
@@ -65,6 +65,7 @@ public class OMSTren {
     public void viaje()
     {
         try {
+            System.out.println("es " + trenLleno.isBroken());
             trenLleno.await();
             mutexCantGenteEnTren.acquire();
 

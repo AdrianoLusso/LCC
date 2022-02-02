@@ -1,4 +1,4 @@
-package parcial2_Lusso_2908.Act1;
+package parcial2.Act1;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;

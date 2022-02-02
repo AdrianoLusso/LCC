@@ -1,5 +1,6 @@
 package otrosMetodosTP.Act2;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Exchanger;
 import java.util.concurrent.Semaphore;
 
@@ -8,7 +9,7 @@ public class OMSCaja {
     private int tiempo;
     private int precio;
     private int dineroTotalDeHoy = 0;
-
+    
     private Exchanger<String> bufferCaja = new Exchanger<String>();
     private int[] compra;
     Semaphore mutexCaja = new Semaphore(1);
