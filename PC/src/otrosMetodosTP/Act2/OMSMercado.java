@@ -14,7 +14,6 @@ public class OMSMercado {
     
     public static void main(String[] args) throws IOException
     {
-        int cant;
         OMSCaja caja = new OMSCaja();
 
         Thread cliente1 = new Thread(new OMSCliente(caja,new int[]{2,3,4,2,4,3}),"cliente 1");

@@ -16,7 +16,7 @@ public class Libro {
 
     private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private ReentrantLock mutexHojasActuales = new ReentrantLock();
-    PriorityBlockingQueue a = new PriorityBlockingQueue<>();    
+
     public Libro(int cantHojas)
     {
         hojasPorEscribir = 0;
@@ -27,7 +27,6 @@ public class Libro {
     //Metodos de escritor
     public synchronized void terminarEscritura()
     {
-        a.
         System.out.println(Thread.currentThread().getName()+" dejo el libro.");
         lock.writeLock().unlock();
 

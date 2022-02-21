@@ -3,6 +3,7 @@ package otrosMetodosTP.Act2;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Exchanger;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.SynchronousQueue;
 
 public class OMSCaja {
 
@@ -10,7 +11,7 @@ public class OMSCaja {
     private int precio;
     private int dineroTotalDeHoy = 0;
     
-    private Exchanger<String> bufferCaja = new Exchanger<String>();
+    private SynchronousQueue bufferCaja = new SynchronousQueue();
     private int[] compra;
     Semaphore mutexCaja = new Semaphore(1);
 
@@ -21,9 +22,12 @@ public class OMSCaja {
 
     public void cobrar()
     {
+        int precio = 0;
+
         //Recibe el dinero y le entrega la compra al cliente.
         try {
-            bufferCaja.exchange("a");
+            precio = (int) bufferCaja.take();
+            System.out.println(Thread.currentThread().getName()+ " ha cobrado " +precio);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -36,7 +40,8 @@ public class OMSCaja {
 
         //Le entrega el dinero al cajero, y este le devuelve su compra, con la informacion actualizada.
         try {
-           bufferCaja.exchange("eee");
+            System.out.println(Thread.currentThread().getName()+ " ha pagado " +precio);
+           bufferCaja.put(precio);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -72,7 +77,9 @@ public class OMSCaja {
 
         //Le entrega al cliente su compra,luego de recibir el dinero y guardar el dinero.
         try {
-            bufferCaja.exchange("b");
+            bufferCaja.put(precio);
+            System.out.println(Thread.currentThread().getName()+ " ha dejado el ticket.Precio: " +precio);
+
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -85,7 +92,9 @@ public class OMSCaja {
 
         //Toma el ticket, en este caso no debe darle nada al cajero.
         try {
-             bufferCaja.exchange("a");
+            precio = (int) bufferCaja.take();
+            System.out.println(Thread.currentThread().getName()+ " ha toma el ticket.El precio es " +precio);
+
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -99,9 +108,9 @@ public class OMSCaja {
     {
         //Toma la compra, y en este caso no debe darle nada
         try {
-            System.out.println("ee");
-            System.out.println(bufferCaja.exchange("hola!"));
-            System.out.println("z");
+            compra = (int[]) bufferCaja.take();
+            System.out.println(Thread.currentThread().getName()+ " ha tomado la compra.");
+
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -117,9 +126,8 @@ public class OMSCaja {
         //Toma exclusion mutua de la caja, y deja su compra en esta misma.
         try {
             mutexCaja.acquire();
-            System.out.println("aa");
-            System.out.println(bufferCaja.exchange("chau"));
-            System.out.println("dd");
+            System.out.println(Thread.currentThread().getName()+ " ha dejado su compra.");
+            bufferCaja.put(compra);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
